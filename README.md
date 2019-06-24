@@ -14,4 +14,4 @@ See our description at [Narwhal](https://github.com/narwhalirc/narwhal).
 
 ## License
 
-Narwhal is licensed under the Apache-2.0 license.
+Tusk is licensed under the Apache-2.0 license.
