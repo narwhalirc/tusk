@@ -1,0 +1,15 @@
+Description = "Tusk is the core functionality of the Narwhal IRC bot"
+License = "Apache-2.0"
+Name = "Tusk"
+Version = 0.1
+
+[Projects]
+	[Projects.tusk]
+		ConsolidateChildDirs = true
+        DisableNestedEnvironment = true
+		Destination = ""
+        EnableGoModules = true
+		Plugin = "go"
+		SimpleName = "tusk"
+		Source = "*.go"
+		Type = "package"
