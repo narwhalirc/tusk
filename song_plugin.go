@@ -4,6 +4,9 @@ import (
 	"github.com/lrstanley/girc"
 )
 
+// NarwhalSong is our Song plugin
+type NarwhalSongPlugin struct{}
+
 // NarwhalSong is our song plugin
 var NarwhalSong NarwhalSongPlugin
 

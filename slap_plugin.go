@@ -8,6 +8,17 @@ import (
 	"time"
 )
 
+// NarwhalSlapConfig is our configuration for the Narwhal autokicker
+type NarwhalSlapConfig struct {
+	// CustomActions is a list of custom actions on how to slap a user
+	CustomActions []string
+}
+
+// NarwhalSlapPlugin is our slap plugin
+type NarwhalSlapPlugin struct {
+	Objects []string
+}
+
 // NarwhalSlap is our slap plugin
 var NarwhalSlap NarwhalSlapPlugin
 

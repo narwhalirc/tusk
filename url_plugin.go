@@ -13,6 +13,9 @@ import (
 	"time"
 )
 
+//NarwhalUrlParserPlugin is our URL plugin
+type NarwhalUrlParserPlugin struct{}
+
 // NarwhalUrlParser is our url parser
 var NarwhalUrlParser NarwhalUrlParserPlugin
 
