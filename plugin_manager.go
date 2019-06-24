@@ -53,6 +53,8 @@ func (pm *NarwhalPluginManager) LoadPlugins() error {
 							}
 						}
 					}
+				} else {
+					trunk.LogInfo("No third-party plugins found")
 				}
 			} else {
 				loadPluginsErr = dirReadErr
