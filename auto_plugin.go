@@ -87,7 +87,6 @@ func (autokicker *NarwhalAutoKickerPlugin) Parse(c *girc.Client, e girc.Event, m
 	if !userShouldBeKicked { // If we haven't yet determined to kick
 		if len(Config.Plugins.AutoKick.Users) > 0 { // If we have a Kick list
 			for _, kickUser := range Config.Plugins.AutoKick.Users {
-				trunk.LogInfo("Checking to kick: " + m.Issuer)
 				userShouldBeKicked = Matches(kickUser, m.Issuer) // Check if string matches our requirements
 
 				if userShouldBeKicked {
