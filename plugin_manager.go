@@ -24,6 +24,8 @@ func (pm *NarwhalPluginManager) IsEnabled(pluginName string) bool {
 func (pm *NarwhalPluginManager) LoadPlugins() error {
 	var loadPluginsErr error
 
+	trunk.LogInfo("Checking for plugins")
+
 	for _, paths := range Paths { // For each path in paths
 		modulesPath := filepath.Join(paths, "modules") // Add modules dir
 
@@ -39,6 +41,8 @@ func (pm *NarwhalPluginManager) LoadPlugins() error {
 
 							if _, alreadyAdded := pm.Modules[pluginName]; !alreadyAdded { // If we haven't already added this plugin
 								if plugin, pluginOpenErr := plugin.Open(filepath.Join(modulesPath, fileName)); pluginOpenErr == nil { // Attempt file open
+									trunk.LogInfo(fmt.Sprintf("Checking %s for valid message handler", fileName))
+
 									if parseFunc, lookupErr := plugin.Lookup("Parse"); lookupErr == nil { // If we successfully looked up the Parse func symbol for this plugin
 										trunk.LogSuccess("Added plugin: " + pluginName)
 										pm.Modules[pluginName] = parseFunc
@@ -58,6 +62,7 @@ func (pm *NarwhalPluginManager) LoadPlugins() error {
 				}
 			} else {
 				loadPluginsErr = dirReadErr
+				break
 			}
 		}
 
