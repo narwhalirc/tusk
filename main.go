@@ -72,7 +72,9 @@ func NewTusk() {
 			trunk.LogFatal("Failed to run client: " + newTuskErr.Error())
 		}
 
-		PluginManager.LoadPlugins()
+		if loadPluginsErr := PluginManager.LoadPlugins(); loadPluginsErr != nil { // Failed to load a plugin
+			trunk.LogWarn("Failed to load plugin: " + loadPluginsErr.Error())
+		}
 	} else {
 		trunk.LogFatal("Failed to read or parse config: " + newTuskErr.Error())
 	}
