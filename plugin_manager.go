@@ -1,6 +1,7 @@
 package tusk
 
 import (
+	"fmt"
 	"github.com/JoshStrobl/trunk"
 	"os"
 	"path/filepath"
