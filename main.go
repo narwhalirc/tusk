@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"plugin"
 )
 
 // A Narwhal is no Narwhal without their tusk!
@@ -50,6 +51,8 @@ func NewTusk() {
 	Config, newTuskErr = ReadConfig()
 
 	if newTuskErr == nil { // Read our config
+		PluginManager.Modules = make(map[string]plugin.Symbol)
+
 		if loadPluginsErr := PluginManager.LoadPlugins(); loadPluginsErr != nil { // Failed to load a plugin
 			trunk.LogWarn("Failed to load plugin: " + loadPluginsErr.Error())
 		}
