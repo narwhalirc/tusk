@@ -124,6 +124,10 @@ func Parser(c *girc.Client, e girc.Event) {
 			if PluginManager.IsEnabled("UrlParser") && (m.Channel != "") { // Url Parser enabled and provided URL over a channel
 				NarwhalUrlParser.Parse(c, e, m) // Run through URL parser
 			}
+
+			for _, parseFunc := range PluginManager.Modules { // For each parser function in our Plugin Modules
+				parseFunc.(func(*girc.Client, girc.Event, NarwhalMessage))(c, e, m)
+			}
 		}
 	}
 }

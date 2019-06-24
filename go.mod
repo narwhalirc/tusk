@@ -1,4 +1,4 @@
-module tusk
+module github.com/narwhalirc/tusk
 
 go 1.12
 

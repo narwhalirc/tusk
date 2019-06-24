@@ -71,6 +71,8 @@ func NewTusk() {
 		if newTuskErr = client.Connect(); newTuskErr != nil { // Failed during run
 			trunk.LogFatal("Failed to run client: " + newTuskErr.Error())
 		}
+
+		PluginManager.LoadPlugins()
 	} else {
 		trunk.LogFatal("Failed to read or parse config: " + newTuskErr.Error())
 	}
