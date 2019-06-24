@@ -50,6 +50,10 @@ func NewTusk() {
 	Config, newTuskErr = ReadConfig()
 
 	if newTuskErr == nil { // Read our config
+		if loadPluginsErr := PluginManager.LoadPlugins(); loadPluginsErr != nil { // Failed to load a plugin
+			trunk.LogWarn("Failed to load plugin: " + loadPluginsErr.Error())
+		}
+
 		ircConfig := girc.Config{
 			Server: Config.Network,
 			Port:   Config.Port,
@@ -70,10 +74,6 @@ func NewTusk() {
 
 		if newTuskErr = client.Connect(); newTuskErr != nil { // Failed during run
 			trunk.LogFatal("Failed to run client: " + newTuskErr.Error())
-		}
-
-		if loadPluginsErr := PluginManager.LoadPlugins(); loadPluginsErr != nil { // Failed to load a plugin
-			trunk.LogWarn("Failed to load plugin: " + loadPluginsErr.Error())
 		}
 	} else {
 		trunk.LogFatal("Failed to read or parse config: " + newTuskErr.Error())
