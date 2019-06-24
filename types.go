@@ -57,6 +57,7 @@ type NarwhalLink struct {
 
 // NarwhalMessage is a custom message
 type NarwhalMessage struct {
+	Admin        bool
 	Channel      string
 	Command      string
 	Host         string

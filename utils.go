@@ -37,19 +37,17 @@ func DeduplicateList(list []string) []string {
 	return newList
 }
 
-// IsAdmin will return if the user is an admin
-func IsAdmin(m NarwhalMessage) bool {
-	var userIsAdmin bool
-
+// IsAdmin will check our issuer, fullIssuer (includes ident), and host if they match our admin list
+func IsAdmin(issuer, fullIssuer, host string) (userIsAdmin bool) {
 	for _, admin := range Config.Users.Admins { // For each listed admin
-		userIsAdmin = Matches(admin, m.Issuer) // Check for a match against the username
+		userIsAdmin = Matches(admin, issuer) // Check for a match against the username
 
 		if !userIsAdmin { // User not an admin by nick
-			userIsAdmin = Matches(admin, m.Host) // Check for a match against the host (more secure in some cases)
+			userIsAdmin = Matches(admin, host) // Check for a match against the host (more secure in some cases)
 		}
 
 		if !userIsAdmin {
-			userIsAdmin = Matches(admin, m.FullIssuer) // Try one last time but with full issuer
+			userIsAdmin = Matches(admin, fullIssuer) // Try one last time but with full issuer
 		}
 
 		if userIsAdmin { // If this is a match
@@ -57,7 +55,7 @@ func IsAdmin(m NarwhalMessage) bool {
 		}
 	}
 
-	return userIsAdmin
+	return
 }
 
 // IsInStringArr will check if this item is in the specified string array
@@ -149,11 +147,14 @@ func ParseMessage(e girc.Event) NarwhalMessage {
 		params = msgSplit[1:]
 	}
 
+	fullIssuer := e.Source.Ident + "@" + e.Source.Host
+
 	return NarwhalMessage{
+		Admin:        IsAdmin(user, fullIssuer, e.Source.Host),
 		Channel:      channel,
 		Command:      command,
 		Host:         e.Source.Host,
-		FullIssuer:   e.Source.Ident + "@" + e.Source.Host,
+		FullIssuer:   fullIssuer,
 		Issuer:       user,
 		Message:      e.Last(),
 		MessageNoCmd: strings.TrimSpace(strings.Replace(e.Last(), "."+command, "", -1)),

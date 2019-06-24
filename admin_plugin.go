@@ -20,7 +20,7 @@ var NarwhalAdminManager NarwhalAdminPlugin
 
 func (adminmanager *NarwhalAdminPlugin) Parse(c *girc.Client, e girc.Event, m NarwhalMessage) {
 	if len(Config.Users.Admins) > 0 { // If there are any admins set
-		if IsAdmin(m) { // If the user issuing a command is an admin
+		if m.Admin { // If the user issuing a command is an admin
 			adminmanager.CommandIssuer(c, e, m) // Pass along to our command issuer
 		}
 	}

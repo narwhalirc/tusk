@@ -52,7 +52,7 @@ func OnConnected(c *girc.Client, e girc.Event) {
 func OnInvite(c *girc.Client, e girc.Event) {
 	msg := ParseMessage(e) // Parse our message
 
-	if IsAdmin(msg) { // If the issuer of the command is an admin
+	if msg.Admin { // If the issuer of the command is an admin
 		trunk.LogInfo("Received invite to " + msg.Message + ". Joining.")
 		c.Cmd.Join(msg.Message)
 
