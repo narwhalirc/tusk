@@ -87,7 +87,7 @@ func (adminmanager *NarwhalAdminPlugin) CommandIssuer(c *girc.Client, e girc.Eve
 		case "proclaim": // Proclamation
 			proclamationMessage := "Behold, I am your robot narwhal overlord. Bow before me, puny hoooomans, or I shall unleash source code upon you."
 			c.Cmd.Reply(e, proclamationMessage)
-			c.Cmd.Action(m.Channel, "means to say to visit https://github.com/JoshStrobl/narwhal")
+			c.Cmd.Action(m.Channel, "means to say to visit https://github.com/narwhalirc/narwhal")
 			break
 		case "removeadmin": // Remove Admin from Admins
 			adminmanager.RemoveAdmin(c, m.MessageNoCmd)
