@@ -157,7 +157,7 @@ func ParseMessage(e girc.Event) NarwhalMessage {
 		FullIssuer:   fullIssuer,
 		Issuer:       user,
 		Message:      e.Last(),
-		MessageNoCmd: strings.TrimSpace(strings.Replace(e.Last(), "."+command, "", -1)),
+		MessageNoCmd: strings.TrimSpace(strings.TrimPrefix(e.Last(), "."+command)),
 		Params:       params,
 	}
 }
