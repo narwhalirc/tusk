@@ -105,6 +105,8 @@ func (adminmanager *NarwhalAdminPlugin) CommandIssuer(c *girc.Client, e girc.Eve
 			c.Close()
 			os.Exit(0)
 			break
+		case "topic": // Set topic
+			c.Cmd.Topic(m.Channel, m.MessageNoCmd) // Set our topic
 		case "unban": // Unban
 			NarwhalAutoKicker.RemoveUsers(params) // Remove the users from Autokick
 			UnbanUsers(c, eventChannel, params)   // Unban the users
