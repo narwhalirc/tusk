@@ -140,11 +140,14 @@ func ParseMessage(e girc.Event) NarwhalMessage {
 	}
 
 	message := strings.TrimSpace(e.Last())
-	msgSplit := strings.Split(message, " ")                 // Split on whitespace
-	command = strings.Replace(msgSplit[:1][0], ".", "", -1) // Get the first item, remove .
+	msgSplit := strings.Split(message, " ") // Split on whitespace
 
-	if len(msgSplit) > 1 {
-		params = msgSplit[1:]
+	if strings.HasPrefix(message, ".") { // Starts with .
+		command = strings.Replace(msgSplit[:1][0], ".", "", -1) // Get the first item, remove .
+
+		if len(msgSplit) > 1 {
+			params = msgSplit[1:]
+		}
 	}
 
 	fullIssuer := e.Source.Ident + "@" + e.Source.Host
@@ -157,7 +160,7 @@ func ParseMessage(e girc.Event) NarwhalMessage {
 		FullIssuer:   fullIssuer,
 		Issuer:       user,
 		Message:      e.Last(),
-		MessageNoCmd: strings.TrimSpace(strings.TrimPrefix(e.Last(), "."+command)),
+		MessageNoCmd: strings.TrimPrefix(message, "."+command),
 		Params:       params,
 	}
 }
