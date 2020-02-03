@@ -3,6 +3,7 @@ package tusk
 import (
 	"github.com/JoshStrobl/trunk"
 	"github.com/lrstanley/girc"
+	"strconv"
 )
 
 // adminCommands is a list of admin commands
@@ -50,7 +51,7 @@ func OnConnected(c *girc.Client, e girc.Event) {
 
 // OnInvite will handle a request to invite an IRC channel
 func OnInvite(c *girc.Client, e girc.Event) {
-	msg := ParseMessage(e) // Parse our message
+	msg := ParseMessage(c, e) // Parse our message
 
 	if msg.Admin { // If the issuer of the command is an admin
 		trunk.LogInfo("Received invite to " + msg.Message + ". Joining.")
@@ -66,7 +67,7 @@ func OnInvite(c *girc.Client, e girc.Event) {
 
 // Parser will handle the majority of incoming messages, user joins, etc.
 func Parser(c *girc.Client, e girc.Event) {
-	m := ParseMessage(e)
+	m := ParseMessage(c, e)
 
 	var ignoreMessage bool
 	command := e.Command
@@ -99,6 +100,7 @@ func Parser(c *girc.Client, e girc.Event) {
 
 		if !userInBlacklist && (m.Issuer != Config.User) { // Ensure we aren't parsing our own bot messages
 			trunk.LogInfo("Allowed: " + m.Issuer)
+			trunk.LogInfo("Authenticated: " + strconv.FormatBool(m.Authenticated))
 			trunk.LogInfo("Full Issuer: " + m.FullIssuer)
 			trunk.LogInfo("Received: " + m.Message)
 			trunk.LogInfo("Host: " + m.Host)

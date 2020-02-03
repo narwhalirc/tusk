@@ -131,7 +131,7 @@ func (adminmanager *NarwhalAdminPlugin) AddAdmin(c *girc.Client, user string) {
 	Config.Users.Admins = append(Config.Users.Admins, user) // Add the user
 
 	if lookedupUser := c.LookupUser(user); lookedupUser != nil { // User exists
-		Config.Users.Admins = append(Config.Users.Admins, lookedupUser.Ident+"@"+lookedupUser.Host)
+		Config.Users.Admins = append(Config.Users.Admins, strings.TrimSpace(lookedupUser.Ident+"@"+lookedupUser.Host))
 	}
 
 	SaveConfig()

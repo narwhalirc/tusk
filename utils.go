@@ -125,7 +125,7 @@ func Matches(requirement string, checking string) bool {
 }
 
 // ParseMessage will parse an event and return a NarwhalMessage
-func ParseMessage(e girc.Event) NarwhalMessage {
+func ParseMessage(c *girc.Client, e girc.Event) NarwhalMessage {
 	var channel string
 	var command string
 	var params []string
@@ -135,8 +135,30 @@ func ParseMessage(e girc.Event) NarwhalMessage {
 		user = e.Source.Ident // Change to using Ident
 	}
 
-	if e.IsFromChannel() { // If this is from a channel
-		channel = e.Params[0] // Channel is first param
+	fullIssuer := e.Source.Ident + "@" + e.Source.Host
+
+	var authenticated bool
+
+	if clientUser := c.LookupUser(user); clientUser != nil { // If we got the user
+		if e.IsFromChannel() { // If this is from a channel
+			channel = e.Params[0] // Channel is first param
+
+			if channelPerms, inChannel := clientUser.Perms.Lookup(channel); inChannel { // Get the channel permissions
+				authenticated = clientUser.IsActive() && channelPerms.IsTrusted()
+			}
+		} else { // From a user directly (DM)
+			var userInFullIssuer bool
+
+			for _, admin := range Config.Users.Admins { // For each listed admin
+				userInFullIssuer = Matches(admin, fullIssuer) // Try one last time but with full issuer
+
+				if userInFullIssuer {
+					break
+				}
+			}
+
+			authenticated = clientUser.IsActive() && userInFullIssuer
+		}
 	}
 
 	message := strings.TrimSpace(e.Last())
@@ -150,18 +172,17 @@ func ParseMessage(e girc.Event) NarwhalMessage {
 		}
 	}
 
-	fullIssuer := e.Source.Ident + "@" + e.Source.Host
-
 	return NarwhalMessage{
-		Admin:        IsAdmin(user, fullIssuer, e.Source.Host),
-		Channel:      channel,
-		Command:      command,
-		Host:         e.Source.Host,
-		FullIssuer:   fullIssuer,
-		Issuer:       user,
-		Message:      e.Last(),
-		MessageNoCmd: strings.TrimPrefix(message, "."+command),
-		Params:       params,
+		Admin:         (IsAdmin(user, fullIssuer, e.Source.Host) && authenticated),
+		Authenticated: authenticated,
+		Channel:       channel,
+		Command:       command,
+		Host:          e.Source.Host,
+		FullIssuer:    fullIssuer,
+		Issuer:        user,
+		Message:       e.Last(),
+		MessageNoCmd:  strings.TrimSpace(strings.TrimPrefix(message, "."+command)),
+		Params:        params,
 	}
 }
 

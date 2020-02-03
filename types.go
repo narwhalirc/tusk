@@ -57,15 +57,16 @@ type NarwhalLink struct {
 
 // NarwhalMessage is a custom message
 type NarwhalMessage struct {
-	Admin        bool
-	Channel      string
-	Command      string
-	Host         string
-	FullIssuer   string
-	Issuer       string
-	Message      string
-	MessageNoCmd string
-	Params       []string
+	Admin         bool
+	Authenticated bool
+	Channel       string
+	Command       string
+	Host          string
+	FullIssuer    string
+	Issuer        string
+	Message       string
+	MessageNoCmd  string
+	Params        []string
 }
 
 // NarwhalPlugin is a plugin interface
