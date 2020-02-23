@@ -144,7 +144,7 @@ func ParseMessage(c *girc.Client, e girc.Event) NarwhalMessage {
 			channel = e.Params[0] // Channel is first param
 
 			if channelPerms, inChannel := clientUser.Perms.Lookup(channel); inChannel { // Get the channel permissions
-				authenticated = clientUser.IsActive() && channelPerms.IsTrusted()
+				authenticated = channelPerms.IsTrusted()
 			}
 		} else { // From a user directly (DM)
 			var userInFullIssuer bool
@@ -157,7 +157,7 @@ func ParseMessage(c *girc.Client, e girc.Event) NarwhalMessage {
 				}
 			}
 
-			authenticated = clientUser.IsActive() && userInFullIssuer
+			authenticated = userInFullIssuer
 		}
 	}
 
