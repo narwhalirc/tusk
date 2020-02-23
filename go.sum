@@ -1,7 +1,7 @@
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/JoshStrobl/trunk v0.0.0-20181002153148-d43b81798735 h1:TGvnxwoz/Und+rEVlyFur39dxxp1OS9J2IFLxNHgePY=
-github.com/JoshStrobl/trunk v0.0.0-20181002153148-d43b81798735/go.mod h1:u89KTMPXdLu7DvOY5m3fY15FCpvVYDglT50pRVgli3c=
+github.com/JoshStrobl/trunk v0.0.0-20200218090856-fe3310723adb h1:NQsZCId6E2afKtrfNdKJZr9EST/7c9w87GsBGsCkUN4=
+github.com/JoshStrobl/trunk v0.0.0-20200218090856-fe3310723adb/go.mod h1:Cpt2tj6u+nvgrIUg2Ljs06ORo7HPncv3kvYn/aO/6lo=
 github.com/PuerkitoBio/goquery v1.5.0 h1:uGvmFXOA73IKluu/F84Xd1tt/z07GYm8X49XKHP7EJk=
 github.com/PuerkitoBio/goquery v1.5.0/go.mod h1:qD2PgZ9lccMbQlc7eEOjaeRlFQON7xY8kdmcsrnKqMg=
 github.com/andybalholm/cascadia v1.0.0 h1:hOCXnnZ5A+3eVDX8pvgl4kofXv2ELss0bKcqRySc45o=
