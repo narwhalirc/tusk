@@ -30,15 +30,22 @@ func init() {
 		"destroys $USER",
 		"discombobulates $USER",
 		"does far worse, taking $USER's system and installing Windows",
+		"drinks $USER's coffee",
+		"eats $USER's pizza",
 		"gives $USER a splinter",
+		"installs libhandy in $USER's computer",
 		"just looks at $USER with disappointment",
+		"knocks out $USER",
+		"launches $USER to space",
 		"opts to not slap $USER today, but rather gives them a cookie",
 		"punches $USER",
 		"rejects $USER's patches",
 		"slaps $USER",
 		"snaps its flippers together, $USER turns into ash and disappears into the wind",
+		"takes out a clown costume, dresses $USER up and tells everyone that $USER is now the clown",
 		"thinks $USER should lose a few pounds",
 		"throws $USER down a ravine",
+		"turns $USER upside down",
 	}
 
 	if len(Config.Plugins.Slap.CustomActions) > 0 { // Has items
