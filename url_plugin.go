@@ -39,7 +39,7 @@ func (parser *NarwhalUrlParserPlugin) Parse(c *girc.Client, e girc.Event, m Narw
 			}
 
 			if link.Extras["IsRedditLink"] == "true" { // Is a Reddit Link
-				message = fmt.Sprintf("[ %s ][Score: %s, %d%% upvotes]", link.Title, link.Extras["Score"], link.Extras["Percentage"])
+				message = fmt.Sprintf("[ %s ][Score: %s, %s%% upvotes]", link.Title, link.Extras["Score"], link.Extras["Percentage"])
 			} else if link.Extras["IsYouTubeLink"] == "true" && link.Extras["IsVideo"] == "true" { // Is a YouTube video specifically
 				desktopYT := fmt.Sprintf("https://youtube.com/watch?v=%s", link.Extras["Video"])
 				mobileYT := fmt.Sprintf("https://m.youtube.com/watch?v=%s", link.Extras["Video"])
