@@ -5,8 +5,8 @@ github.com/JoshStrobl/trunk v0.0.0-20200218090856-fe3310723adb h1:NQsZCId6E2afKt
 github.com/JoshStrobl/trunk v0.0.0-20200218090856-fe3310723adb/go.mod h1:Cpt2tj6u+nvgrIUg2Ljs06ORo7HPncv3kvYn/aO/6lo=
 github.com/PuerkitoBio/goquery v1.5.0 h1:uGvmFXOA73IKluu/F84Xd1tt/z07GYm8X49XKHP7EJk=
 github.com/PuerkitoBio/goquery v1.5.0/go.mod h1:qD2PgZ9lccMbQlc7eEOjaeRlFQON7xY8kdmcsrnKqMg=
-github.com/TryStreambits/sauron v0.0.0-20200824204111-fda7a29012b0 h1:d7YIKfn/M1rEqA3LR0RJ7bxzLo+e3OVuS9U1b01tJp0=
-github.com/TryStreambits/sauron v0.0.0-20200824204111-fda7a29012b0/go.mod h1:JFJdUdGbjIsYPJuGtb2snBxQUkBsjrTZ9lj9An1ORjQ=
+github.com/TryStreambits/sauron v0.0.0-20200824213556-e7a9f965f400 h1:otJE7GOxnuEAztW3Jr3uB1voG1Wq5AlrfrPiZqiByyQ=
+github.com/TryStreambits/sauron v0.0.0-20200824213556-e7a9f965f400/go.mod h1:JFJdUdGbjIsYPJuGtb2snBxQUkBsjrTZ9lj9An1ORjQ=
 github.com/andybalholm/cascadia v1.0.0 h1:hOCXnnZ5A+3eVDX8pvgl4kofXv2ELss0bKcqRySc45o=
 github.com/andybalholm/cascadia v1.0.0/go.mod h1:GsXiBklL0woXo1j/WYWtSYYC4ouU9PqHO0sqidkEA4Y=
 github.com/lrstanley/girc v0.0.0-20190801035559-4fc93959e1a7 h1:BS9tqL0OCiOGuy/CYYk2gc33fxqaqh5/rhqMKu4tcYA=

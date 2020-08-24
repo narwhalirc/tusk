@@ -6,10 +6,11 @@ Version = 0.1
 [Projects]
 	[Projects.tusk]
 		ConsolidateChildDirs = true
-        DisableNestedEnvironment = true
+		DisableNestedEnvironment = true
 		Destination = ""
-        EnableGoModules = true
+		EnableGoModules = true
 		Plugin = "go"
+		Private = ["github.com"]
 		SimpleName = "tusk"
 		Source = "*.go"
 		Type = "package"
