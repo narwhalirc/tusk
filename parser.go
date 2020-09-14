@@ -52,42 +52,19 @@ func OnConnected(c *girc.Client, e girc.Event) {
 
 // OnInvite will handle a request to invite an IRC channel
 func OnInvite(c *girc.Client, e girc.Event) {
-	msg := ParseMessage(c, e)              // Parse our message
-	clientUser := c.LookupUser(msg.Issuer) // Attempt to look up the user
+	msg := ParseMessage(c, e) // Parse our message
 
-	channel := c.LookupChannel(msg.Message)
-	fmt.Println("%v", channel)
-
-	if clientUser == nil { // Failed to look up the user
-		trunk.LogInfo("Failed to look up user: " + msg.Issuer)
+	if !msg.Admin { // User is not trusted
+		trunk.LogErr(fmt.Sprintf("Rejecting invite by non-admin %s to %s", msg.Issuer, msg.Message))
 		return
 	}
 
-	fmt.Println("%v", clientUser)
-
-	channelPerms, permsOk := clientUser.Perms.Lookup(msg.Message) // Get the channel the invite is being issued from
-
-	if !permsOk {
-		trunk.LogInfo(fmt.Sprintf("Failed to get permissions from %s for %s", msg.Message, msg.Issuer))
-		return
-	}
-
-	if !channelPerms.IsTrusted() { // User is not trusted
-		trunk.LogInfo(fmt.Sprintf("Rejecting invite by non-admin %s to %s", msg.Issuer, msg.Message))
-		return
-	}
-
-	trunk.LogInfo(fmt.Sprintf("Joining channel %s from channel trusted user: %s", msg.Message, msg.Issuer))
+	trunk.LogInfo(fmt.Sprintf("Joining channel %s invited by admin %s", msg.Message, msg.Issuer))
 	c.Cmd.Join(msg.Message)
 
 	Config.Channels = append(Config.Channels, msg.Message)
 	Config.Channels = DeduplicateList(Config.Channels)
-
-	msg = ParseMessage(c, e) // Re-parse our message for Msg.Admin check
-
-	if msg.Admin { // Bot admin
-		SaveConfig()
-	}
+	SaveConfig()
 }
 
 // Parser will handle the majority of incoming messages, user joins, etc.
