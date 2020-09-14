@@ -55,20 +55,20 @@ func OnInvite(c *girc.Client, e girc.Event) {
 	msg := ParseMessage(c, e)              // Parse our message
 	clientUser := c.LookupUser(msg.Issuer) // Attempt to look up the user
 
+	channel := c.LookupChannel(msg.Message)
+	fmt.Println("%v", channel)
+
 	if clientUser == nil { // Failed to look up the user
-		trunk.LogErr("Failed to look up user: " + msg.Issuer)
+		trunk.LogInfo("Failed to look up user: " + msg.Issuer)
 		return
 	}
 
 	fmt.Println("%v", clientUser)
 
-	channel := c.LookupChannel(msg.Message)
-	fmt.Println("%v", channel)
-
 	channelPerms, permsOk := clientUser.Perms.Lookup(msg.Message) // Get the channel the invite is being issued from
 
 	if !permsOk {
-		trunk.LogErr(fmt.Sprintf("Failed to get permissions from %s for %s", msg.Message, msg.Issuer))
+		trunk.LogInfo(fmt.Sprintf("Failed to get permissions from %s for %s", msg.Message, msg.Issuer))
 		return
 	}
 
