@@ -45,7 +45,9 @@ func (parser *NarwhalUrlParserPlugin) Parse(c *girc.Client, e girc.Event, m Narw
 				mobileYT := fmt.Sprintf("https://m.youtube.com/watch?v=%s", link.Extras["Video"])
 				message = fmt.Sprintf("[ %s | Desktop: %s | Mobile: %s ]", link.Title, desktopYT, mobileYT)
 			} else {
-				message = fmt.Sprintf("[ %s ]", link.Title)
+				if len(strings.ReplaceAll(link.Title, " ", "")) != 0 { // If we have a non-empty title
+					message = fmt.Sprintf("[ %s ]", link.Title)
+				}
 			}
 
 			if message != "" { // Not an empty title

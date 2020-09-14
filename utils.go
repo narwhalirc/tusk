@@ -1,10 +1,14 @@
 package tusk
 
 import (
+	"fmt"
 	"github.com/lrstanley/girc"
+	"math/rand"
+	"os"
 	"regexp"
 	"sort"
 	"strings"
+	"time"
 )
 
 // This file contains misc. utilities
@@ -35,6 +39,22 @@ func DeduplicateList(list []string) []string {
 
 	sort.Strings(newList) // Sort our entries
 	return newList
+}
+
+// Ghost will attempt to GHOST the client
+func Ghost(c *girc.Client) {
+	c.Send(&girc.Event{
+		Command: "GHOST",
+		Params:  []string{Config.User},
+	})
+}
+
+// GetRandomString will get a random string from our array
+func GetRandomString(list []string) (item string) {
+	rand.Seed(time.Now().Unix()) // Seed on Parse
+	randomItemNum := rand.Intn(len(list))
+	item = list[randomItemNum]
+	return
 }
 
 // IsAdmin will check our issuer, fullIssuer (includes ident), and host if they match our admin list
@@ -205,6 +225,12 @@ func RemoveFromStringArr(list []string, items []string) []string {
 	}
 
 	return newList
+}
+
+// Shutdown will PART from all channels and shut down the client
+func Shutdown(c *girc.Client) {
+	c.Quit(fmt.Sprintf("%s IRC Bot is restarting or shutting down.", Config.User))
+	os.Exit(0)
 }
 
 // UnbanUser will unban the specified user from a channel

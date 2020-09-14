@@ -123,6 +123,10 @@ func Parser(c *girc.Client, e girc.Event) {
 				NarwhalSlap.Parse(c, e, m) // Run through slap
 			}
 
+			if PluginManager.IsEnabled("ThankMe") { // Thank The Bot enabled
+				NarwhalThank.Parse(c, e, m) // Run through thank me
+			}
+
 			if PluginManager.IsEnabled("UrlParser") && (m.Channel != "") { // Url Parser enabled and provided URL over a channel
 				NarwhalUrlParser.Parse(c, e, m) // Run through URL parser
 			}

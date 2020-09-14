@@ -1,11 +1,8 @@
 package tusk
 
 import (
-	"github.com/JoshStrobl/trunk"
 	"github.com/lrstanley/girc"
-	"math/rand"
 	"strings"
-	"time"
 )
 
 // NarwhalSlapConfig is our configuration for the Narwhal autokicker
@@ -16,43 +13,42 @@ type NarwhalSlapConfig struct {
 
 // NarwhalSlapPlugin is our slap plugin
 type NarwhalSlapPlugin struct {
-	Objects []string
+	Messages []string
 }
 
 // NarwhalSlap is our slap plugin
 var NarwhalSlap NarwhalSlapPlugin
 
 func init() {
-	objects := []string{
-		"annihilates $USER",
-		"closes all of $USER's bug reports out of spite",
-		"decimates $USER",
-		"destroys $USER",
-		"discombobulates $USER",
-		"does far worse than a slap, taking $USER's system and installing Windows",
-		"drinks $USER's coffee",
-		"eats $USER's pizza",
-		"gives $USER a splinter",
-		"installs libhandy on $USER's computer",
-		"just looks at $USER with disappointment",
-		"knocks out $USER",
-		"launches $USER into space",
-		"opts to not slap $USER today, but rather gives them a cookie",
-		"rejects $USER's patches",
-		"slaps $USER",
-		"snaps its flippers together, $USER turns into ash and disappears into the wind",
-		"takes out a clown costume, dresses $USER up and tells everyone that $USER is now the clown",
-		"thinks $USER should lose a few pounds",
-		"throws $USER down a ravine",
-		"turns $USER upside down",
+	NarwhalSlap = NarwhalSlapPlugin{
+		Messages: []string{
+			"annihilates $USER",
+			"closes all of $USER's bug reports out of spite",
+			"destroys $USER",
+			"discombobulates $USER",
+			"does far worse than a slap, taking $USER's system and installing Windows",
+			"drinks $USER's coffee",
+			"eats $USER's pizza",
+			"execs vim on $USER's system and watches them fail to quit it",
+			"gives $USER a splinter",
+			"installs libhandy on $USER's computer",
+			"just looks at $USER with disappointment",
+			"high fives $USER instead",
+			"launches $USER into space",
+			"opts to not slap $USER today, but rather gives them a cookie",
+			"rejects $USER's patches",
+			"slaps $USER",
+			"snaps its flippers together, $USER turns into ash and disappears into the wind",
+			"takes out a clown costume, dresses $USER up and tells everyone that $USER is now the clown",
+			"thinks $USER should lose a few pounds",
+			"thinks $USER's BMI is a bit too high",
+			"throws $USER down a ravine",
+			"turns $USER upside down",
+		},
 	}
 
 	if len(Config.Plugins.Slap.CustomActions) > 0 { // Has items
-		objects = append(objects, Config.Plugins.Slap.CustomActions...) // Append our objects
-	}
-
-	NarwhalSlap = NarwhalSlapPlugin{
-		Objects: objects,
+		NarwhalSlap.Messages = append(NarwhalSlap.Messages, Config.Plugins.Slap.CustomActions...) // Append our objects
 	}
 }
 
@@ -63,30 +59,28 @@ func (slap *NarwhalSlapPlugin) Parse(c *girc.Client, e girc.Event, m NarwhalMess
 
 	if len(m.Params) == 1 { // If a user has been specified
 		user := m.Params[0]
-		rand.Seed(time.Now().Unix()) // Seed on Parse
-		randomItemNum := rand.Intn(len(slap.Objects))
 
 		var action string
 
-		if m.Command == "slap" && randomItemNum != -1 { // Snap
-			action = slap.Objects[randomItemNum]
+		if m.Command == "slap" { // Slap
+			action = GetRandomString(slap.Messages)
+
+			if action == "" { // Shouldn't be empty but let's handle it anyways
+				action = "slaps $USER."
+			}
 		} else { // Snap or fallback for failed RNG
 			action = "slaps its flippers together, $USER turns into ash and disappears into the wind"
 		}
 
 		if user != Config.User { // Not self-harm
-			if randomItemNum == -1 {
-				trunk.LogErr("Seems to have panicked.")
-			} else {
-				cChan := c.LookupChannel(m.Channel) // Get the channel, if it exists
+			cChan := c.LookupChannel(m.Channel) // Get the channel, if it exists
 
-				if cChan != nil {
-					if cChan.UserIn(user) { // If the user in the channel
-						action = strings.Replace(action, "$USER", m.Params[0], -1) // Get the random action
-						c.Cmd.Action(m.Channel, action)
-					} else { // User not in channel
-						c.Cmd.ReplyTo(e, "it appears that you are hallucinating. This user isn't in this channel.")
-					}
+			if cChan != nil {
+				if cChan.UserIn(user) { // If the user in the channel
+					action = strings.Replace(action, "$USER", m.Params[0], -1) // Get the random action
+					c.Cmd.Action(m.Channel, action)
+				} else { // User not in channel
+					c.Cmd.ReplyTo(e, "it appears that you are hallucinating. This user isn't in this channel.")
 				}
 			}
 		} else { // Self-harm

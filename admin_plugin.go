@@ -2,7 +2,6 @@ package tusk
 
 import (
 	"github.com/lrstanley/girc"
-	"os"
 	"strings"
 )
 
@@ -78,12 +77,16 @@ func (adminmanager *NarwhalAdminPlugin) CommandIssuer(c *girc.Client, e girc.Eve
 		case "blacklist": // Blacklist
 			adminmanager.Blacklist(params) // Blacklist the user(s)
 			break
+		case "ghost": // Ghost (useful for taking back a nick during reconnect)
+			Ghost(c) // Attempt to GHOST
+			break
 		case "kick": // Kick
 			KickUsers(c, eventChannel, params) // Kick the users
 			break
 		case "leave": // Leave a channel
 			c.Cmd.Action(m.Channel, "has far more important things to attend do!")
 			c.Cmd.Part(m.Channel)
+			break
 		case "proclaim": // Proclamation
 			proclamationMessage := "Behold, I am your robot narwhal overlord. Bow before me, puny hoooomans, or I shall unleash source code upon you."
 			c.Cmd.Reply(e, proclamationMessage)
@@ -102,11 +105,11 @@ func (adminmanager *NarwhalAdminPlugin) CommandIssuer(c *girc.Client, e girc.Eve
 			adminmanager.RemoveFromBlacklist(params)
 			break
 		case "shutdown": // Shutdown the Bot
-			c.Close()
-			os.Exit(0)
+			Shutdown(c)
 			break
 		case "topic": // Set topic
 			c.Cmd.Topic(m.Channel, m.MessageNoCmd) // Set our topic
+			break
 		case "unban": // Unban
 			NarwhalAutoKicker.RemoveUsers(params) // Remove the users from Autokick
 			UnbanUsers(c, eventChannel, params)   // Unban the users
