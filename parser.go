@@ -1,6 +1,7 @@
 package tusk
 
 import (
+	"fmt"
 	"github.com/JoshStrobl/trunk"
 	"github.com/lrstanley/girc"
 	"strconv"
@@ -51,17 +52,36 @@ func OnConnected(c *girc.Client, e girc.Event) {
 
 // OnInvite will handle a request to invite an IRC channel
 func OnInvite(c *girc.Client, e girc.Event) {
-	msg := ParseMessage(c, e) // Parse our message
+	msg := ParseMessage(c, e)              // Parse our message
+	clientUser := c.LookupUser(msg.Issuer) // Attempt to look up the user
 
-	if msg.Admin { // If the issuer of the command is an admin
-		trunk.LogInfo("Received invite to " + msg.Message + ". Joining.")
-		c.Cmd.Join(msg.Message)
+	if clientUser == nil { // Failed to look up the user
+		trunk.LogErr("Failed to look up user: " + msg.Issuer)
+		return
+	}
 
-		Config.Channels = append(Config.Channels, msg.Message)
-		Config.Channels = DeduplicateList(Config.Channels)
+	channelPerms, permsOk := clientUser.Perms.Lookup(msg.Channel) // Get the channel the invite is being issued from
+
+	if !permsOk {
+		trunk.LogErr(fmt.Sprintf("Failed to get permissions from %s for %s", msg.Channel, msg.Issuer))
+		return
+	}
+
+	if !channelPerms.IsTrusted() { // User is not trusted
+		trunk.LogInfo(fmt.Sprintf("Rejecting invite by non-admin %s to %s", msg.Issuer, msg.Channel))
+		return
+	}
+
+	trunk.LogInfo(fmt.Sprintf("Joining channel %s from channel trusted user: %s", msg.Channel, msg.Issuer))
+	c.Cmd.Join(msg.Message)
+
+	Config.Channels = append(Config.Channels, msg.Message)
+	Config.Channels = DeduplicateList(Config.Channels)
+
+	msg = ParseMessage(c, e) // Re-parse our message for Msg.Admin check
+
+	if msg.Admin { // Bot admin
 		SaveConfig()
-	} else {
-		trunk.LogInfo("Rejecting invite by non-admin " + msg.Issuer + " to " + msg.Message)
 	}
 }
 
