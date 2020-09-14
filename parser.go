@@ -60,6 +60,11 @@ func OnInvite(c *girc.Client, e girc.Event) {
 		return
 	}
 
+	fmt.Println("%v", clientUser)
+
+	channel := c.LookupChannel(msg.Message)
+	fmt.Println("%v", channel)
+
 	channelPerms, permsOk := clientUser.Perms.Lookup(msg.Message) // Get the channel the invite is being issued from
 
 	if !permsOk {
