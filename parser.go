@@ -53,6 +53,9 @@ func OnConnected(c *girc.Client, e girc.Event) {
 // OnInvite will handle a request to invite an IRC channel
 func OnInvite(c *girc.Client, e girc.Event) {
 	msg := ParseMessage(c, e)              // Parse our message
+
+	fmt.Println("%v", msg) // Debug invite
+
 	clientUser := c.LookupUser(msg.Issuer) // Attempt to look up the user
 
 	if clientUser == nil { // Failed to look up the user
@@ -73,9 +76,9 @@ func OnInvite(c *girc.Client, e girc.Event) {
 	}
 
 	trunk.LogInfo(fmt.Sprintf("Joining channel %s from channel trusted user: %s", msg.Channel, msg.Issuer))
-	c.Cmd.Join(msg.Message)
+	c.Cmd.Join(msg.Channel)
 
-	Config.Channels = append(Config.Channels, msg.Message)
+	Config.Channels = append(Config.Channels, msg.Channel)
 	Config.Channels = DeduplicateList(Config.Channels)
 
 	msg = ParseMessage(c, e) // Re-parse our message for Msg.Admin check
