@@ -66,11 +66,11 @@ func (adminmanager *NarwhalAdminPlugin) CommandIssuer(c *girc.Client, e girc.Eve
 			NarwhalAutoKicker.AddMessage(m.MessageNoCmd) // Add the message to Autokick MessageMatches
 			break
 		case "autokick": // Kick and add to Autokick
-			KickUsers(c, eventChannel, params) // Kick the users
+			KickUsers(c, e, m, params)         // Kick the users
 			NarwhalAutoKicker.AddUsers(params) // Add the users to Autokick
 			break
 		case "ban": // Ban
-			KickUsers(c, eventChannel, params) // Kick the users before issuing ban
+			KickUsers(c, e, m, params)         // Kick the users before issuing ban
 			NarwhalAutoKicker.AddUsers(params) // Add the users to Autokick
 			BanUsers(c, eventChannel, params)  // Ban the users
 			break
@@ -81,7 +81,7 @@ func (adminmanager *NarwhalAdminPlugin) CommandIssuer(c *girc.Client, e girc.Eve
 			Ghost(c) // Attempt to GHOST
 			break
 		case "kick": // Kick
-			KickUsers(c, eventChannel, params) // Kick the users
+			KickUsers(c, e, m, params) // Kick the users
 			break
 		case "leave": // Leave a channel
 			c.Cmd.Action(m.Channel, "has far more important things to attend do!")

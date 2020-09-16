@@ -116,7 +116,7 @@ func (autokicker *NarwhalAutoKickerPlugin) Parse(c *girc.Client, e girc.Event, m
 		}
 
 		for _, channel := range Config.Channels { // For each channel
-			KickUser(c, channel, m.Issuer)
+			KickUser(c, e, m, m.Issuer)
 
 			if Config.Plugins.AutoKick.EnabledAutoban && (kickCount >= Config.Plugins.AutoKick.MinimumKickToBanCount) { // User has been kicked more than our minimum
 				BanUser(c, channel, m.Issuer)

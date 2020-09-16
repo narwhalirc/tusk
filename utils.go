@@ -104,14 +104,19 @@ func IsInStringArr(list []string, item string) bool {
 }
 
 // KickUser will kick the specified user from a channel
-func KickUser(c *girc.Client, channel string, user string) {
-	c.Cmd.Kick(channel, user, "Detected by this Narwhal for kick approval. Kicking.")
+func KickUser(c *girc.Client, e girc.Event, m NarwhalMessage, user string) {
+	if user != Config.User { // Not kicking ourselves
+		c.Cmd.Kick(m.Channel, user, "Detected by this Narwhal for kick approval. Kicking.")
+	} else { // Kicking ourselves, don't allow
+		c.Cmd.ReplyTo(e, "Kick of bot detected. Enforcing countermeasure.")
+		KickUser(c, e, m, m.Issuer) // Kick the issuer
+	}
 }
 
 // KickUsers will kick multiple users from a channel
-func KickUsers(c *girc.Client, channel string, users []string) {
+func KickUsers(c *girc.Client, e girc.Event, m NarwhalMessage, users []string) {
 	for _, user := range users { // For each user
-		KickUser(c, channel, user) // Issue a KickUser
+		KickUser(c, e, m, user) // Issue a KickUser
 	}
 }
 
@@ -171,8 +176,9 @@ func ParseMessage(c *girc.Client, e girc.Event) NarwhalMessage {
 	var authenticated bool
 
 	if clientUser := c.LookupUser(user); clientUser != nil { // If we got the user
+		channel = e.Params[0] // Default to channel being first param
+
 		if e.IsFromChannel() { // If this is from a channel
-			channel = e.Params[0] // Channel is first param
 
 			if channelPerms, inChannel := clientUser.Perms.Lookup(channel); inChannel { // Get the channel permissions
 				authenticated = channelPerms.IsTrusted()
