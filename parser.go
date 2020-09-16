@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/JoshStrobl/trunk"
 	"github.com/lrstanley/girc"
-	"strconv"
 )
 
 // adminCommands is a list of admin commands
@@ -48,6 +47,23 @@ func OnConnected(c *girc.Client, e girc.Event) {
 			trunk.LogInfo("Joining " + channel)
 		}
 	}
+}
+
+// OnJoin will handle when a user joins a channel
+func OnJoin(c *girc.Client, e girc.Event) {
+	m := ParseMessage(c, e)
+
+	if PluginManager.IsEnabled("AutoKick") { // AutoKick enabled
+		NarwhalAutoKicker.Parse(c, e, m) // Run through auto-kicker first
+	}
+
+	fmt.Printf("Joined: %v\n", m)
+}
+
+// OnLeave will handle when a user leaves a channel
+func OnLeave(c *girc.Client, e girc.Event) {
+	m := ParseMessage(c, e)
+	fmt.Printf("Left: %v\n", m)
 }
 
 // OnInvite will handle a request to invite an IRC channel
@@ -96,17 +112,8 @@ func Parser(c *girc.Client, e girc.Event) {
 			}
 		}
 
-		if PluginManager.IsEnabled("AutoKick") { // AutoKick enabled
-			NarwhalAutoKicker.Parse(c, e, m) // Run through auto-kicker first
-		}
-
 		if !userInBlacklist && (m.Issuer != Config.User) { // Ensure we aren't parsing our own bot messages
-			trunk.LogInfo("Allowed: " + m.Issuer)
-			trunk.LogInfo("Authenticated: " + strconv.FormatBool(m.Authenticated))
-			trunk.LogInfo("Full Issuer: " + m.FullIssuer)
-			trunk.LogInfo("Received: " + m.Message)
-			trunk.LogInfo("Host: " + m.Host)
-			trunk.LogInfo("Possible Channel: " + m.Channel)
+			PrintPrettyMessage(m)
 
 			if PluginManager.IsEnabled("Admin") { // Admin Management enabled
 				NarwhalAdminManager.Parse(c, e, m) // Run through management

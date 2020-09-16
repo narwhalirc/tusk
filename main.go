@@ -71,9 +71,10 @@ func NewTusk() {
 
 		client := girc.New(ircConfig)
 		client.Handlers.Add(girc.CONNECTED, OnConnected) // On CONNECTED, trigger OnConnected
-		client.Handlers.Add(girc.JOIN, Parser)           // On JOIN, trigger our Parser
 		client.Handlers.Add(girc.INVITE, OnInvite)       // On INVITE, trigger OnInvite
+		client.Handlers.Add(girc.JOIN, OnJoin)           // On JOIN, trigger our OnJoin
 		client.Handlers.Add(girc.PRIVMSG, Parser)        // On PRIVMSG, trigger our Parser
+		client.Handlers.Add(girc.KICK, OnKick)           // On KICK, trigger our OnKick
 
 		if newTuskErr = client.Connect(); newTuskErr != nil { // Failed during run
 			trunk.LogFatal("Failed to run client: " + newTuskErr.Error())

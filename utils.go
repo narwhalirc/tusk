@@ -11,6 +11,10 @@ import (
 	"time"
 )
 
+var (
+	MessageBreaker = strings.Repeat("-", 80)
+)
+
 // This file contains misc. utilities
 
 // BanUser will ban the specified user from a channel
@@ -54,6 +58,13 @@ func GetRandomString(list []string) (item string) {
 	rand.Seed(time.Now().Unix()) // Seed on Parse
 	randomItemNum := rand.Intn(len(list))
 	item = list[randomItemNum]
+	return
+}
+
+// GetNowAsISO8601 will return the current date / time as ISO 8601
+func GetNowAsISO8601() (now string) {
+	n := time.Now()
+	now = n.Format("2006-01-02T15:04:05-0700")
 	return
 }
 
@@ -204,6 +215,14 @@ func ParseMessage(c *girc.Client, e girc.Event) NarwhalMessage {
 		MessageNoCmd:  strings.TrimSpace(strings.TrimPrefix(message, "."+command)),
 		Params:        params,
 	}
+}
+
+// PrintPrettyMessage will print to out output a slightly prettier version of this Message
+func PrintPrettyMessage(m NarwhalMessage) {
+	fmt.Println(MessageBreaker)
+	fmt.Printf("%s in %s by %s (%s)\n", GetNowAsISO8601(), m.Channel, m.Issuer, m.FullIssuer)
+	fmt.Println(m.Message)
+	fmt.Println(MessageBreaker)
 }
 
 // RemoveFromStringArr will remove items from the string array

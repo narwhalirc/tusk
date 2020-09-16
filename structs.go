@@ -2,7 +2,6 @@ package tusk
 
 import (
 	"github.com/lrstanley/girc"
-	"net/url"
 )
 
 // Our structs and interfaces
@@ -37,24 +36,6 @@ type NarwhalConfig struct {
 	Users NarwhalUsersConfig `toml:"Users,omitempty"`
 }
 
-// NarwhalLink is a struct containing information related to an HTTP resource
-type NarwhalLink struct {
-	// IsReddit designates whether this resource is a Reddit URL
-	IsReddit bool
-
-	// IsYoutube designates whether this resource is a Youtube URL
-	IsYoutube bool
-
-	// Link is our net URL struct
-	Link url.URL
-
-	// Title is the page title
-	Title string
-
-	// Votes is the Reddit votes (if IsReddit)
-	Votes NarwhalRedditVotes
-}
-
 // NarwhalMessage is a custom message
 type NarwhalMessage struct {
 	Admin         bool
@@ -72,13 +53,6 @@ type NarwhalMessage struct {
 // NarwhalPlugin is a plugin interface
 type NarwhalPlugin interface {
 	Parse(c *girc.Client, e girc.Event, m NarwhalMessage)
-}
-
-// NarwhalRedditVotes is the total votes for a reddit thread
-type NarwhalRedditVotes struct {
-	Dislikes string
-	Likes    string
-	Score    string
 }
 
 // NarwhalUsersConfig is our configuration for blacklisting users, administrative users, and autokicking
