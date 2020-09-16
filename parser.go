@@ -53,11 +53,14 @@ func OnConnected(c *girc.Client, e girc.Event) {
 func OnJoin(c *girc.Client, e girc.Event) {
 	m := ParseMessage(c, e)
 
+	m.Channel = e.Params[0] // Set channel to first param
+
+	fmt.Println(MessageBreaker)
+	fmt.Printf("[%s] Joined %s: %s (%s)\n", GetNowAsISO8601(), m.Channel, m.Issuer, m.FullIssuer)
+
 	if PluginManager.IsEnabled("AutoKick") { // AutoKick enabled
 		NarwhalAutoKicker.Parse(c, e, m) // Run through auto-kicker first
 	}
-	fmt.Printf("Params: %v\n", e.Params)
-	fmt.Printf("Joined: %v\n", m)
 }
 
 // OnLeave will handle when a user leaves a channel

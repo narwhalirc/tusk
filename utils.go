@@ -226,7 +226,7 @@ func ParseMessage(c *girc.Client, e girc.Event) NarwhalMessage {
 // PrintPrettyMessage will print to out output a slightly prettier version of this Message
 func PrintPrettyMessage(m NarwhalMessage) {
 	fmt.Println(MessageBreaker)
-	fmt.Printf("%s in %s by %s (%s)\n", GetNowAsISO8601(), m.Channel, m.Issuer, m.FullIssuer)
+	fmt.Printf("[%s] %s by %s (%s)\n", GetNowAsISO8601(), m.Channel, m.Issuer, m.FullIssuer)
 	fmt.Println(m.Message)
 }
 
