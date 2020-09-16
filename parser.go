@@ -56,7 +56,7 @@ func OnJoin(c *girc.Client, e girc.Event) {
 	if PluginManager.IsEnabled("AutoKick") { // AutoKick enabled
 		NarwhalAutoKicker.Parse(c, e, m) // Run through auto-kicker first
 	}
-
+	fmt.Printf("Params: %v\n", e.Params)
 	fmt.Printf("Joined: %v\n", m)
 }
 
