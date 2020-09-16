@@ -228,7 +228,6 @@ func PrintPrettyMessage(m NarwhalMessage) {
 	fmt.Println(MessageBreaker)
 	fmt.Printf("%s in %s by %s (%s)\n", GetNowAsISO8601(), m.Channel, m.Issuer, m.FullIssuer)
 	fmt.Println(m.Message)
-	fmt.Println(MessageBreaker)
 }
 
 // RemoveFromStringArr will remove items from the string array
