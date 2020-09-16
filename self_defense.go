@@ -12,4 +12,6 @@ import (
 func OnKick(c *girc.Client, e girc.Event) {
 	m := ParseMessage(c, e) // Parse our message
 	fmt.Printf("Kicked: %v\n", m)
+	fmt.Printf("Tags: %v\n", e.Tags)
+	fmt.Printf("Params: %v\n", e.Params)
 }
