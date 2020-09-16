@@ -114,8 +114,8 @@ func KickUser(c *girc.Client, e girc.Event, m NarwhalMessage, user string) {
 }
 
 // KickUsers will kick multiple users from a channel
-func KickUsers(c *girc.Client, e girc.Event, m NarwhalMessage, users []string) {
-	for _, user := range users { // For each user
+func KickUsers(c *girc.Client, e girc.Event, m NarwhalMessage) {
+	for _, user := range m.Params { // For each user
 		KickUser(c, e, m, user) // Issue a KickUser
 	}
 }
