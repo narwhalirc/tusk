@@ -122,6 +122,10 @@ func Parser(c *girc.Client, e girc.Event) {
 				NarwhalAdminManager.Parse(c, e, m) // Run through management
 			}
 
+			if PluginManager.IsEnabled("AutoKick") { // AutoKick enabled
+				NarwhalAutoKicker.Parse(c, e, m) // Run through auto-kicker first
+			}
+
 			if PluginManager.IsEnabled("Replacer") { // Replacer enabled
 				NarwhalReplacer.AddToCache(m)
 				NarwhalReplacer.Parse(c, e, m) // Run through replacer

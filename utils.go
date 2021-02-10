@@ -2,6 +2,7 @@ package tusk
 
 import (
 	"fmt"
+	"github.com/JoshStrobl/trunk"
 	"github.com/lrstanley/girc"
 	"math/rand"
 	"os"
@@ -123,41 +124,34 @@ func KickUsers(c *girc.Client, e girc.Event, m NarwhalMessage) {
 // Matches is our string match function that checks our provided string against a requirement
 // Such requirement can be basic globbing, regex, or exact match.
 func Matches(requirement string, checking string) bool {
-	var matches bool
 	matchFromEnd := strings.HasPrefix(requirement, "*")       // Check if we're globbing from the start
 	matchFromBeginning := strings.HasSuffix(requirement, "*") // Check if we're globbing at the end
 	hasReg := strings.HasPrefix(requirement, "re:")           // Check if this is a regex based match
 
 	if hasReg { // Is Regex
-		regexMessage := strings.TrimPrefix(requirement, "re:")          // Remove the indicator this is a regex
-		if regex, reErr := regexp.Compile(regexMessage); reErr == nil { // If we create our regex object and it is valid
+		regexMessage := strings.TrimPrefix(requirement, "re:") // Remove the indicator this is a regex
+		regex, reErr := regexp.Compile(regexMessage)
+
+		if reErr == nil { // If we create our regex object and it is valid
 			if regex.MatchString(checking) { // If we get a regex match
-				matches = true
+				return true
 			}
+		} else {
+			trunk.LogErr(fmt.Sprintf("Failed to parse regex for %s: %s", regexMessage, reErr.Error()))
 		}
 	} else if matchFromEnd || matchFromBeginning { // Has beginning or ending glob
 		noGlobMatch := strings.Replace(requirement, "*", "", -1)
 
 		if matchFromEnd && matchFromBeginning { // If we're globbing both sides, meaning a single contains
-			if strings.Contains(checking, noGlobMatch) { // If our checking string contains the noGlobMatch
-				matches = true
-			}
+			return strings.Contains(checking, noGlobMatch) // If our checking string contains the noGlobMatch
 		} else if matchFromEnd && !matchFromBeginning { // If we're only globbing the beginning
-			if strings.HasSuffix(checking, noGlobMatch) { // If our checking string ends with noGlobMatch
-				matches = true
-			}
+			return strings.HasSuffix(checking, noGlobMatch) // If our checking string ends with noGlobMatch
 		} else if !matchFromEnd && matchFromBeginning { // If we're only globbing the ending
-			if strings.HasPrefix(checking, noGlobMatch) { // If our checking string begins with noGlobMatch
-				matches = true
-			}
-		}
-	} else { // Exact match
-		if checking == requirement { // If this is an exact match
-			matches = true
+			return strings.HasPrefix(checking, noGlobMatch) // If our checking string begins with noGlobMatch
 		}
 	}
 
-	return matches
+	return checking == requirement // If this is an exact match
 }
 
 // ParseMessage will parse an event and return a NarwhalMessage

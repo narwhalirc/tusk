@@ -71,7 +71,7 @@ func (autokicker *NarwhalAutoKickerPlugin) Parse(c *girc.Client, e girc.Event, m
 	if !userShouldBeKicked { // If we haven't yet determined to kick
 		if len(Config.Plugins.AutoKick.MessageMatches) > 0 { // If we have a Messages list
 			for _, match := range Config.Plugins.AutoKick.MessageMatches {
-				userShouldBeKicked = Matches(match, m.Message) // Check if string matches our requirements
+				userShouldBeKicked = Matches(match, m.MessageNoCmd) // Check if string matches our requirements
 
 				if userShouldBeKicked {
 					break
@@ -122,6 +122,8 @@ func (autokicker *NarwhalAutoKickerPlugin) Parse(c *girc.Client, e girc.Event, m
 				BanUser(c, channel, m.Issuer)
 			}
 		}
+	} else if userShouldBeKicked && m.Admin { // Should be kicked but is an admin
+		trunk.LogInfo("Should be kicked but is an admin.")
 	}
 }
 
