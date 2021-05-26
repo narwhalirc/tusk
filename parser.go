@@ -40,11 +40,11 @@ func init() {
 
 func AnnounceLibera(c *girc.Client) {
 	solusIrcChannels := []string{
-		"#budgie-desktop-dev",
-		"#solus",
-		"#solus-chat",
-		"#solus-dev",
-		"#solus-livestream",
+		"budgie-desktop-dev",
+		"solus",
+		"solus-chat",
+		"solus-dev",
+		"solus-livestream",
 	}
 
 	for _, channel := range solusIrcChannels { // For each IRC channel
