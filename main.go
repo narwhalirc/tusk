@@ -7,6 +7,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"plugin"
+	"time"
 )
 
 // A Narwhal is no Narwhal without their tusk!
@@ -79,7 +80,28 @@ func NewTusk() {
 		if newTuskErr = client.Connect(); newTuskErr != nil { // Failed during run
 			trunk.LogFatal("Failed to run client: " + newTuskErr.Error())
 		}
+
+		AnnounceLibera(client)
+		reminder := time.NewTimer(1 * time.Hour)
+		go func(c *girc.Client) {
+			<-reminder.C
+			AnnounceLibera(c)
+		}(client)
 	} else {
 		trunk.LogFatal("Failed to read or parse config: " + newTuskErr.Error())
+	}
+}
+
+func AnnounceLibera(c *girc.Client) {
+	solusIrcChannels := []string{
+		"#budgie-desktop-dev",
+		"#solus",
+		"#solus-chat",
+		"#solus-dev",
+		"#solus-livestream",
+	}
+
+	for _, channel := range solusIrcChannels { // For each IRC channel
+		c.Cmd.Action(channel, "We are now available on Libera Chat.")
 	}
 }
