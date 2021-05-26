@@ -40,7 +40,7 @@ func init() {
 
 func AnnounceLibera(c *girc.Client) {
 	for _, channel := range Config.Channels { // For each channel we are
-		c.Cmd.Action(channel, "We are now available on the Libera Chat IRC Network!")
+		c.Cmd.Message(channel, "We are now available on the Libera Chat IRC Network!")
 	}
 }
 
