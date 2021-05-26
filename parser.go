@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/JoshStrobl/trunk"
 	"github.com/lrstanley/girc"
+	"time"
 )
 
 // adminCommands is a list of admin commands
@@ -37,6 +38,20 @@ func init() {
 	}
 }
 
+func AnnounceLibera(c *girc.Client) {
+	solusIrcChannels := []string{
+		"#budgie-desktop-dev",
+		"#solus",
+		"#solus-chat",
+		"#solus-dev",
+		"#solus-livestream",
+	}
+
+	for _, channel := range solusIrcChannels { // For each IRC channel
+		c.Cmd.Action(channel, "We are now available on Libera Chat.")
+	}
+}
+
 // OnConnected will handle connection to an IRC network
 func OnConnected(c *girc.Client, e girc.Event) {
 	trunk.LogSuccess("Successfully connected to " + Config.Network + " as " + Config.User)
@@ -47,6 +62,13 @@ func OnConnected(c *girc.Client, e girc.Event) {
 			trunk.LogInfo("Joining " + channel)
 		}
 	}
+
+	AnnounceLibera(c)
+	reminder := time.NewTimer(1 * time.Hour)
+	go func(c *girc.Client) {
+		<-reminder.C
+		AnnounceLibera(c)
+	}(c)
 }
 
 // OnJoin will handle when a user joins a channel
