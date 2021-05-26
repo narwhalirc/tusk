@@ -39,16 +39,8 @@ func init() {
 }
 
 func AnnounceLibera(c *girc.Client) {
-	solusIrcChannels := []string{
-		"budgie-desktop-dev",
-		"solus",
-		"solus-chat",
-		"solus-dev",
-		"solus-livestream",
-	}
-
-	for _, channel := range solusIrcChannels { // For each IRC channel
-		c.Cmd.Action(channel, "We are now available on Libera Chat.")
+	for _, channel := range Config.Channels { // For each channel we are
+		c.Cmd.Action(channel, "We are now available on the Libera Chat IRC Network!")
 	}
 }
 
@@ -63,6 +55,7 @@ func OnConnected(c *girc.Client, e girc.Event) {
 		}
 	}
 
+	time.Sleep(5 * time.Second) // We don't know when we've joined, so just wait
 	AnnounceLibera(c)
 	reminder := time.NewTimer(1 * time.Hour)
 	go func(c *girc.Client) {
