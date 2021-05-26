@@ -14,6 +14,9 @@ type NarwhalConfig struct {
 	// Port is the port on the network we're connecting to. Likely 6667.
 	Port int `toml:"Port,omitempty"`
 
+	// LiberaAnnounceMigration enables the option to passively announce a move from a different IRC network to Libera
+	LiberaAnnounceMigration bool
+
 	// User is the IRC Bot username
 	User string
 

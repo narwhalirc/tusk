@@ -72,7 +72,7 @@ func SetDefaults(config NarwhalConfig) NarwhalConfig {
 	}
 
 	if config.Network == "" {
-		config.Network = "chat.freenode.net" // Default to freenode
+		config.Network = "chat.libera.chat" // Default to freenode
 	}
 
 	if config.Port == 0 {

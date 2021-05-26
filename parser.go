@@ -55,7 +55,12 @@ func OnConnected(c *girc.Client, e girc.Event) {
 		}
 	}
 
-	time.Sleep(5 * time.Second) // We don't know when we've joined, so just wait
+	if !Config.LiberaAnnounceMigration { // Enable migration announcement
+		return
+	}
+
+	time.Sleep(5 * time.Second) // We don't know when we've joined, so just waitY
+
 	AnnounceLibera(c)
 	reminder := time.NewTimer(1 * time.Hour)
 	go func(c *girc.Client) {
