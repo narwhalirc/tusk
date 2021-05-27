@@ -64,8 +64,12 @@ func OnConnected(c *girc.Client, e girc.Event) {
 	AnnounceLibera(c)
 	reminder := time.NewTicker(1 * time.Hour)
 	go func(c *girc.Client) {
-		<-reminder.C
-		AnnounceLibera(c)
+		for {
+			select {
+			case <-reminder.C:
+				AnnounceLibera(c)
+			}
+		}
 	}(c)
 }
 
